@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search for Rides</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Search for Rides</h1>
+    <form method="POST">
+        <label for="origin">Origin:</label><br>
+        <input type="text" id="origin" name="origin"><br><br>
+
+        <label for="destination">Destination:</label><br>
+        <input type="text" id="destination" name="destination"><br><br>
+
+        <input type="submit" value="Search">
+    </form>
+
+    <h2>Available Rides</h2>
+    <ul>
+        {% for ride in rides %}
+            <li>{{ ride.driver_name }} is driving from {{ ride.origin }} to {{ ride.destination }} on {{ ride.date }}. Seats available: {{ ride.seats_available }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>
