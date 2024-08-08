@@ -7,7 +7,7 @@ app = Flask(__name__)
 db_config = {
     'user': 'your_mysql_username',
     'password': 'your_mysql_password',
-    'host': '127.0.0.1',
+    'host': 'localhost',
     'database': 'carpooling_db'
 }
 
