@@ -1,36 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Search for Rides</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Rides</title>
 </head>
 <body>
-    <h1>Search for Rides</h1>
-    <form action="/search_rides" method="post">
+    <h1>Search Rides</h1>
+
+    <!-- Display message if exists -->
+    {% if message %}
+        <div class="message">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <!-- Search form -->
+    <form method="post" action="{{ url_for('search_rides') }}">
         <label for="origin">Origin:</label>
         <input type="text" id="origin" name="origin" required><br>
-        
+
         <label for="destination">Destination:</label>
         <input type="text" id="destination" name="destination" required><br>
-        
-        <input type="submit" value="Search">
+
+        <button type="submit">Search Rides</button>
     </form>
-    <h2>Available Rides</h2>
-    <ul>
-        {% for ride in rides %}
-        <li>
-            {{ ride.driver_name }} - {{ ride.origin }} to {{ ride.destination }} on {{ ride.date }} - Seats Available: {{ ride.seats_available }}
-            <form action="/book_ride/{{ ride.id }}" method="post">
-                <label for="user_name">Your Name:</label>
-                <input type="text" id="user_name" name="user_name" required><br>
-                
-                <label for="seats_booked">Seats to Book:</label>
-                <input type="number" id="seats_booked" name="seats_booked" required><br>
-                
-                <input type="submit" value="Book Ride">
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="/">Back to Home</a>
+
+    <!-- Display rides -->
+    {% if rides %}
+        <ul>
+            {% for ride in rides %}
+                <li>{{ ride.driver_name }}: {{ ride.origin }} to {{ ride.destination }} on {{ ride.date }} ({{ ride.seats_available }} seats available)</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No rides found.</p>
+    {% endif %}
 </body>
 </html>
