@@ -1,29 +1,36 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search for Rides</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Search for Rides</h1>
-    <form method="POST">
-        <label for="origin">Origin:</label><br>
-        <input type="text" id="origin" name="origin"><br><br>
-
-        <label for="destination">Destination:</label><br>
-        <input type="text" id="destination" name="destination"><br><br>
-
+    <form action="/search_rides" method="post">
+        <label for="origin">Origin:</label>
+        <input type="text" id="origin" name="origin" required><br>
+        
+        <label for="destination">Destination:</label>
+        <input type="text" id="destination" name="destination" required><br>
+        
         <input type="submit" value="Search">
     </form>
-
     <h2>Available Rides</h2>
     <ul>
         {% for ride in rides %}
-            <li>{{ ride.driver_name }} is driving from {{ ride.origin }} to {{ ride.destination }} on {{ ride.date }}. Seats available: {{ ride.seats_available }}</li>
+        <li>
+            {{ ride.driver_name }} - {{ ride.origin }} to {{ ride.destination }} on {{ ride.date }} - Seats Available: {{ ride.seats_available }}
+            <form action="/book_ride/{{ ride.id }}" method="post">
+                <label for="user_name">Your Name:</label>
+                <input type="text" id="user_name" name="user_name" required><br>
+                
+                <label for="seats_booked">Seats to Book:</label>
+                <input type="number" id="seats_booked" name="seats_booked" required><br>
+                
+                <input type="submit" value="Book Ride">
+            </form>
+        </li>
         {% endfor %}
     </ul>
-    <a href="{{ url_for('index') }}">Back to Home</a>
+    <a href="/">Back to Home</a>
 </body>
 </html>
