@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 
 import mysql.connector
 
@@ -23,6 +23,7 @@ def index():
 
 @app.route('/offer_ride', methods=['GET', 'POST'])
 def offer_ride():
+    message = None
     if request.method == 'POST':
         driver_name = request.form['driver_name']
         origin = request.form['origin']
@@ -40,10 +41,9 @@ def offer_ride():
         cursor.close()
         conn.close()
 
-        flash('Ride offered successfully!', 'success')  # Flash a success message
-        return redirect(url_for('offer_ride'))  # Redirect to the same page
+        message = 'Ride offered successfully!'  # Set a success message
 
-    return render_template('offer_ride.html')
+    return render_template('offer_ride.html', message=message)
 
 
 @app.route('/search_rides', methods=['GET', 'POST'])
