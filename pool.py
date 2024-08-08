@@ -13,7 +13,7 @@ app = Flask(__name__)
 db_config = {
     'user': 'root',
     'password': 'Premya@1996',
-    'host': '127.0.0.1:3306',
+    'host': 'localhost',
     'database': 'carpooling_db'
 }
 
