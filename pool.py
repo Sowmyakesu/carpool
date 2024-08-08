@@ -39,7 +39,7 @@ def offer_ride():
 
         return redirect('/search_rides')
 
-    return render_template('offer_rides.html')
+    return render_template('offer_ride.html')
 
 @app.route('/search_rides', methods=['GET', 'POST'])
 def search_rides():
