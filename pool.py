@@ -29,15 +29,15 @@ def offer_ride():
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO rides (driver_name, origin, destination, date, seats_available)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (driver_name, origin, destination, date, seats_available))
+        cursor.execute(
+            "INSERT INTO rides (driver_name, origin, destination, date, seats_available) VALUES (%s, %s, %s, %s, %s)",
+            (driver_name, origin, destination, date, seats_available)
+        )
         conn.commit()
         cursor.close()
         conn.close()
 
-        return redirect('/search_rides')
+        return redirect(url_for('offer_ride'))  # Redirect to the same page or a confirmation page
 
     return render_template('offer_ride.html')
 
