@@ -3,11 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offer a Ride</title>
+    <title>Offer Ride</title>
+    <style>
+        .flash-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            color: #fff;
+        }
+        .flash-message.success {
+            background-color: #28a745;
+        }
+        .flash-message.error {
+            background-color: #dc3545;
+        }
+    </style>
 </head>
 <body>
     <h1>Offer a Ride</h1>
-    <form action="/offer_ride" method="POST">
+    
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('offer_ride') }}">
         <label for="driver_name">Driver Name:</label>
         <input type="text" id="driver_name" name="driver_name" required><br>
 
@@ -23,7 +49,7 @@
         <label for="seats_available">Seats Available:</label>
         <input type="number" id="seats_available" name="seats_available" required><br>
 
-        <button type="submit">Submit</button>
+        <button type="submit">Offer Ride</button>
     </form>
 </body>
 </html>
