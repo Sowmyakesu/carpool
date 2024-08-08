@@ -70,6 +70,7 @@ def search_rides():
 def book_ride(ride_id):
     user_name = request.form['user_name']
     seats_booked = int(request.form['seats_booked'])
+    message = None
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -94,10 +95,12 @@ def book_ride(ride_id):
         """, (seats_booked, ride_id))
         conn.commit()
         
+        message = 'Ride booked successfully!'  # Set a success message
+
     cursor.close()
     conn.close()
     
-    return redirect('/search_rides')
+    return redirect(url_for('search_rides', message=message))
 
 if __name__ == '__main__':
     app.run(debug=True)
