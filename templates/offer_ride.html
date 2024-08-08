@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offer a Ride</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Offer a Ride</h1>
+    <form method="POST">
+        <label for="driver_name">Driver Name:</label><br>
+        <input type="text" id="driver_name" name="driver_name"><br><br>
+
+        <label for="origin">Origin:</label><br>
+        <input type="text" id="origin" name="origin"><br><br>
+
+        <label for="destination">Destination:</label><br>
+        <input type="text" id="destination" name="destination"><br><br>
+
+        <label for="date">Date (YYYY-MM-DD):</label><br>
+        <input type="text" id="date" name="date"><br><br>
+
+        <label for="seats_available">Seats Available:</label><br>
+        <input type="number" id="seats_available" name="seats_available"><br><br>
+
+        <input type="submit" value="Offer Ride">
+    </form>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>
