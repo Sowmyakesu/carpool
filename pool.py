@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 
 import mysql.connector
 
@@ -19,6 +19,8 @@ def get_db_connection():
 def index():
     return render_template('index.html')
 
+
+
 @app.route('/offer_ride', methods=['GET', 'POST'])
 def offer_ride():
     if request.method == 'POST':
@@ -38,9 +40,11 @@ def offer_ride():
         cursor.close()
         conn.close()
 
-        return redirect(url_for('offer_ride'))  # Redirect to the same page or a confirmation page
+        flash('Ride offered successfully!', 'success')  # Flash a success message
+        return redirect(url_for('offer_ride'))  # Redirect to the same page
 
     return render_template('offer_ride.html')
+
 
 @app.route('/search_rides', methods=['GET', 'POST'])
 def search_rides():
