@@ -1,33 +1,23 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, request, redirect, render_template
 import mysql.connector
 
 app = Flask(__name__)
 
-# MySQL Database configuration
+# Database configuration
 db_config = {
-    'user': 'root',
-    'password': 'Premya@1996',
-    'host': 'localhost',
+    'user': 'your_mysql_username',
+    'password': 'your_mysql_password',
+    'host': '127.0.0.1',
     'database': 'carpooling_db'
 }
 
-# Function to connect to the database
 def get_db_connection():
-    conn = mysql.connector.connect(**db_config)
-    return conn
+    return mysql.connector.connect(**db_config)
 
-# Home route
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Offer a ride
 @app.route('/offer_ride', methods=['GET', 'POST'])
 def offer_ride():
     if request.method == 'POST':
@@ -47,13 +37,12 @@ def offer_ride():
         cursor.close()
         conn.close()
 
-        return redirect(url_for('index'))
-    return render_template('offer_ride.html')
+        return redirect('/search_rides')
 
-# Search for rides
+    return render_template('offer_rides.html')
+
 @app.route('/search_rides', methods=['GET', 'POST'])
 def search_rides():
-    rides = []
     if request.method == 'POST':
         origin = request.form['origin']
         destination = request.form['destination']
@@ -61,14 +50,49 @@ def search_rides():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
-            SELECT * FROM rides WHERE origin = %s AND destination = %s
+            SELECT * FROM rides
+            WHERE origin = %s AND destination = %s AND seats_available > 0
         """, (origin, destination))
         rides = cursor.fetchall()
         cursor.close()
         conn.close()
+
+        return render_template('search_rides.html', rides=rides)
+
+    return render_template('search_rides.html', rides=[])
+
+@app.route('/book_ride/<int:ride_id>', methods=['POST'])
+def book_ride(ride_id):
+    user_name = request.form['user_name']
+    seats_booked = int(request.form['seats_booked'])
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Check if enough seats are available
+    cursor.execute("""
+        SELECT seats_available FROM rides WHERE id = %s
+    """, (ride_id,))
+    result = cursor.fetchone()
+    
+    if result and result[0] >= seats_booked:
+        # Insert booking record
+        cursor.execute("""
+            INSERT INTO bookings (ride_id, user_name, seats_booked)
+            VALUES (%s, %s, %s)
+        """, (ride_id, user_name, seats_booked))
+        conn.commit()
         
-    return render_template('search_rides.html', rides=rides)
+        # Update seats available
+        cursor.execute("""
+            UPDATE rides SET seats_available = seats_available - %s WHERE id = %s
+        """, (seats_booked, ride_id))
+        conn.commit()
+        
+    cursor.close()
+    conn.close()
+    
+    return redirect('/search_rides')
 
 if __name__ == '__main__':
     app.run(debug=True)
-
