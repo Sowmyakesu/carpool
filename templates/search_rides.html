@@ -1,36 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search for Rides</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f9fc;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .image-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        li form {
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #4CAF50;
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Search for Rides</h1>
-    <form action="/search_rides" method="post">
-        <label for="origin">Origin:</label>
-        <input type="text" id="origin" name="origin" required><br>
-        
-        <label for="destination">Destination:</label>
-        <input type="text" id="destination" name="destination" required><br>
-        
-        <input type="submit" value="Search">
-    </form>
-    <h2>Available Rides</h2>
-    <ul>
-        {% for ride in rides %}
-        <li>
-            {{ ride.driver_name }} - {{ ride.origin }} to {{ ride.destination }} on {{ ride.date }} - Seats Available: {{ ride.seats_available }}
-            <form action="/book_ride/{{ ride.id }}" method="post">
-                <label for="user_name">Your Name:</label>
-                <input type="text" id="user_name" name="user_name" required><br>
-                
-                <label for="seats_booked">Seats to Book:</label>
-                <input type="number" id="seats_booked" name="seats_booked" required><br>
-                
-                <input type="submit" value="Book Ride">
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="/">Back to Home</a>
+    <div class="container">
+        <h1>Search for Rides</h1>
+
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='search_ride_image.jpg') }}" alt="Search Ride Image">
+        </div>
+
+        <form action="/search_rides" method="post">
+            <label for="origin">Origin:</label>
+            <input type="text" id="origin" name="origin" required>
+
+            <label for="destination">Destination:</label>
+            <input type="text" id="destination" name="destination" required>
+
+            <input type="submit" value="Search">
+        </form>
+
+        <h2>Available Rides</h2>
+        <ul>
+            {% for ride in rides %}
+            <li>
+                <strong>{{ ride.driver_name }}</strong> - {{ ride.origin }} to {{ ride.destination }} on {{ ride.date }} <br> 
+                <em>Seats Available: {{ ride.seats_available }}</em>
+                <form action="/book_ride/{{ ride.id }}" method="post">
+                    <label for="user_name">Your Name:</label>
+                    <input type="text" id="user_name" name="user_name" required>
+
+                    <label for="seats_booked">Seats to Book:</label>
+                    <input type="number" id="seats_booked" name="seats_booked" required>
+
+                    <input type="submit" value="Book Ride">
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <a href="/">Back to Home</a>
+    </div>
 </body>
 </html>
